@@ -33,7 +33,7 @@ import types
 import datetime
 from collections import OrderedDict
 from typing import Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
-from ..ext.commands.cooldowns import CooldownMapping, BucketType
+from ..cooldowns import CooldownMapping, BucketType
 
 from .context import ApplicationContext, AutocompleteContext
 from .errors import ApplicationCommandError, CheckFailure, ApplicationCommandInvokeError, CooldownTriggered
