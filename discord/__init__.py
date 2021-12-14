@@ -62,6 +62,7 @@ from .threads import *
 from .bot import *
 from .commands import *
 from .cog import Cog
+from .cooldowns import *
 from .welcome_screen import *
 
 
