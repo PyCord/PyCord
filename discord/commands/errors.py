@@ -62,3 +62,26 @@ class ApplicationCommandInvokeError(ApplicationCommandError):
     def __init__(self, e: Exception) -> None:
         self.original: Exception = e
         super().__init__(f'Application Command raised an exception: {e.__class__.__name__}: {e}')
+
+class CooldownError(DiscordException):
+    """Raises When a cooldown has an error."""
+    pass
+
+class CooldownTriggered(CooldownError):
+    """Triggers when a cooldown is triggered"""
+    def __init__(self, cooldown, retry_after: float, type) -> None:
+        self.cooldown = cooldown
+        self.retry_after: float = retry_after
+        self.type = type
+        super().__init__(f'Command has been put into cooldown, Retry time: {retry_after:.2f}s')
+
+class MaxConcurrencyReached(CooldownError):
+    """Happens when MayConcurrency is reached."""
+    def __init__(self, number: int, per) -> None:
+        self.number: int = number
+        self.per = per
+        name = per.name
+        suffix = 'per %s' % name if per.name != 'default' else 'globally'
+        plural = '%s times %s' if number > 1 else '%s time %s'
+        fmt = plural % (number, suffix)
+        super().__init__(f'Too many people are using this command. It can only be used {fmt} concurrently.')
