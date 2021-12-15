@@ -36,7 +36,7 @@ from .abc import PrivateChannel
 from .commands.errors import MaxConcurrencyReached
 
 if TYPE_CHECKING:
-    from ...message import Message
+    from .message import Message
 
 __all__ = (
     'BucketType',
