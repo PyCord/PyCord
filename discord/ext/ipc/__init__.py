@@ -7,6 +7,6 @@ Extension module to facilitate the creation of IPC Sessions.
 :license: MIT, see LICENSE for more details.
 """
 
-from .core import *
-from .errors import *
-from .server import *
+from .core import Session
+from .errors import IPCException
+from .server import Server, IPCServerResponse

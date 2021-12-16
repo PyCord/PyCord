@@ -68,7 +68,26 @@ class IPCServerResponse:
 
 class Server:
     """The IPC Server.
+   
     .. versionadded:: 2.0
+
+    Parameters
+    ----------
+    Route
+        Registers a coroutine as an endpoint when you have an instance of :class:`Server`
+    update_endpoints
+        Called internally to update the endpoints for :class:`Cog` routes.
+    handle_request
+        Handles WebSocket requests from :class:`Session`
+    handle_multicast
+        Handles multicasting websocket requests from :class:`Session`
+    start
+        Starts The IPC Process.
+    
+    Raises
+    ------
+    IPCException
+        Exceptions For IPC
     """
 
     ROUTES = {}
@@ -98,7 +117,7 @@ class Server:
 
     def route(self, name=None):
         """Registers a coroutine as an endpoint when
-        you have access to an instance of :class:`.ext.ipc.Server`
+        you have access to an instance of :class:`Server`
 
         .. versionadded:: 2.0
         """
@@ -123,7 +142,7 @@ class Server:
         self.ROUTES = {}
 
     async def handle_request(self, request):
-        """Handles WebSocket requests from :class:`.ext.ipc.Session`
+        """Handles WebSocket requests from :class:`Session`
 
         .. versionadded:: 2.0
 
@@ -216,7 +235,7 @@ class Server:
                     raise IPCException(error_response)
 
     async def handle_multicast(self, request):
-        """Handles multicasting websocket requests from :class:`.ext.ipc.Session`
+        """Handles multicasting websocket requests from :class:`Session`
 
         .. versionadded:: 2.0
 

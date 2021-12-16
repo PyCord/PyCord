@@ -34,7 +34,24 @@ __all__ = "Session"
 
 
 class Session:
-    """Handles getting webserver requests to the bot."""
+    """Handles getting webserver requests to the bot.
+    
+    .. versionadded:: 2.0
+
+    Parameters
+    ----------
+    url
+        Returns The URL.
+    socket_ini
+        Tries to connect to the server.
+    request
+        Sends requests to the IPC Server
+
+    Raises
+    ------
+    IPCException
+        Exceptions For IPC
+    """
 
     def __init__(
         self, adress="localhost", port=None, multicast_port=20000, bot_key=None
@@ -70,7 +87,7 @@ class Session:
 
             payload = {"connect": True, "headers": {"Authorization", self.bot_key}}
 
-            _log.debug("IPC: Multicast Server < %r", payload)
+            _log.debug(f"IPC: Multicast Server {payload}")
 
             await self.multicast.send_json(payload)
             ipcrec = await self.multicast.receive()
