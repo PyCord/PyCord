@@ -95,7 +95,7 @@ class Server:
     def __init__(
         self,
         bot,
-        adress="localhost",
+        address="localhost",
         port=7385,
         bot_key=None,
         toggle_multicast=True,
@@ -104,7 +104,7 @@ class Server:
         self.bot = bot
         self.loop = bot.loop
 
-        self.adress = adress
+        self.address = address
         self.port = port
         self.bot_key = bot_key
         self.toggle_multicast = toggle_multicast
@@ -271,7 +271,7 @@ class Server:
         runner = aiohttp.web.AppRunner(application)
         await runner.setup()
 
-        site = aiohttp.web.TCPSite(runner, self.adress, port)
+        site = aiohttp.web.TCPSite(runner, self.address, port)
         await site.start()
 
     # There is no real reason for this to be async for now but maybe in use later

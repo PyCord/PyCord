@@ -54,11 +54,11 @@ class Session:
     """
 
     def __init__(
-        self, adress="localhost", port=None, multicast_port=20000, bot_key=None
+        self, address="localhost", port=None, multicast_port=20000, bot_key=None
     ):
         self.loop = asyncio.get_event_loop()
 
-        self.adress = adress
+        self.address = address
         self.port = port
         self.mc_port = multicast_port
         self.bot_key = bot_key
@@ -68,7 +68,7 @@ class Session:
 
     @property
     def url(self):
-        return "ws://{0.adress}:{1}".format(
+        return "ws://{0.address}:{1}".format(
             self, self.port if self.port else self.multicast_port
         )
 
