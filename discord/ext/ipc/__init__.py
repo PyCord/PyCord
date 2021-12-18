@@ -9,4 +9,4 @@ Extension module to facilitate the creation of IPC Sessions.
 
 from .core import Session
 from .errors import IPCException
-from .server import Server, IPCServerResponse
+from .server import Server, IPCServerResponse, make
