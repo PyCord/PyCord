@@ -32,7 +32,13 @@ _log = logging.getLogger(__name__)
 __all__ = ("IPCServerResponse", "Server", "route")
 
 
-def route(name=None):
+def make(name=None):
+    """Registers a coroutine as an endpoint when
+    you don't have access to an instance of :class:`Server`
+
+    .. versionadded:: 2.0
+    """
+
     def decorator(func):
         if not name:
             Server.ROUTES[func.__name__] = func
@@ -68,7 +74,7 @@ class IPCServerResponse:
 
 class Server:
     """The IPC Server.
-   
+
     .. versionadded:: 2.0
 
     Parameters
@@ -83,7 +89,7 @@ class Server:
         Handles multicasting websocket requests from :class:`Session`
     start
         Starts The IPC Process.
-    
+
     Raises
     ------
     IPCException
@@ -115,7 +121,7 @@ class Server:
 
         self.endpoints = {}
 
-    def route(self, name=None):
+    def make(self, name=None):
         """Registers a coroutine as an endpoint when
         you have access to an instance of :class:`Server`
 
@@ -141,7 +147,7 @@ class Server:
 
         self.ROUTES = {}
 
-    async def handle_request(self, request):
+    async def handle_requests(self, request):
         """Handles WebSocket requests from :class:`Session`
 
         .. versionadded:: 2.0
@@ -168,14 +174,14 @@ class Server:
             headers = request.get("headers")
 
             if not headers or headers.get("Authorization") != self.bot_key:
-                _log.info("IPC: Unauthorized request recived!")
+                _log.info("IPC: Unauthorized request recieved!")
                 response = {
                     "error": "IPC-Server: Invalid or no token provided.",
                     "code": 403,
                 }
             else:
                 if not endpoint or endpoint not in self.endpoints:
-                    _log.info("IPC: Recieved invalid or no endpoint")
+                    _log.info("IPC: Recieved an invalid endpoint.")
                     response = {
                         "error": "IPC-Server: Invalid or no endpoint given.",
                         "code": 400,
@@ -255,7 +261,10 @@ class Server:
             headers = request.get("headers")
 
             if not headers or headers.get("Authorization") != self.bot_key:
-                response = {"error": "IPC-Server: Token provided is invalid.", "code": 403}
+                response = {
+                    "error": "IPC-Server: Token provided is invalid.",
+                    "code": 403,
+                }
             else:
                 response = {
                     "message": "Successful Connection!",
@@ -293,3 +302,4 @@ class Server:
             )
 
         self.loop.run_until_complete(self.__start(self._server, self.port))
+
