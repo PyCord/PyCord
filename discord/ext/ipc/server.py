@@ -45,7 +45,7 @@ def route(name=None):
 
 
 class IPCServerResponse:
-    """Responds to endpoint requests
+    """Responds to endpoint requests.
 
     .. versionadded:: 2.0
     """
@@ -255,10 +255,10 @@ class Server:
             headers = request.get("headers")
 
             if not headers or headers.get("Authorization") != self.bot_key:
-                response = {"error": "IPC-Server: Invalid or no token provided.", "code": 403}
+                response = {"error": "IPC-Server: Token provided is invalid.", "code": 403}
             else:
                 response = {
-                    "message": "Connection Success!",
+                    "message": "Successful Connection!",
                     "port": self.port,
                     "code": 200,
                 }
@@ -274,8 +274,7 @@ class Server:
         site = aiohttp.web.TCPSite(runner, self.address, port)
         await site.start()
 
-    # There is no real reason for this to be async for now but maybe in use later
-    async def start(self):
+    def start(self):
         """Starts The IPC Process.
 
         .. versionadded:: 2.0

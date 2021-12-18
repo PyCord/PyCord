@@ -73,7 +73,10 @@ class Session:
         )
 
     async def socket_ini(self):
-        """Tries to connect to the server."""
+        """Initializes connection to the :class:`Server`
+        
+        .. versionadded:: 2.0
+        """
         _log.info("IPC: Starting to connect the the server WebSocket...")
         self.session = aiohttp.ClientSession()
 
