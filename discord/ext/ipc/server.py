@@ -32,7 +32,7 @@ _log = logging.getLogger(__name__)
 __all__ = ("IPCServerResponse", "Server", "route")
 
 
-def make(name=None):
+def make(endpoint=None):
     """Registers a coroutine as an endpoint when
     you don't have access to an instance of :class:`Server`
 
@@ -40,10 +40,10 @@ def make(name=None):
     """
 
     def decorator(func):
-        if not name:
+        if not endpoint:
             Server.ROUTES[func.__name__] = func
         else:
-            Server.ROUTES[name] = func
+            Server.ROUTES[endpoint] = func
 
         return func
 
@@ -121,7 +121,7 @@ class Server:
 
         self.endpoints = {}
 
-    def make(self, name=None):
+    def make(self, endpoint=None):
         """Registers a coroutine as an endpoint when
         you have access to an instance of :class:`Server`
 
@@ -129,10 +129,10 @@ class Server:
         """
 
         def decorator(func):
-            if not name:
+            if not endpoint:
                 self.endpoints[func.__name__] = func
             else:
-                self.endpoints[name] = func
+                self.endpoints[endpoint] = func
 
             return func
 

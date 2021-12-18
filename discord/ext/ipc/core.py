@@ -112,7 +112,10 @@ class Session:
         return self.websocket
 
     async def send(self, endpoint, **kwargs):
-        """Sends a request to the IPC server."""
+        """Sends a request to the IPC server.
+        
+        .. versionadded:: 2.0
+        """
         _log.info(f"IPC: Requesting IPC Server for {endpoint} with {kwargs}")
 
         if not self.session:
