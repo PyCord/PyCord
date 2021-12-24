@@ -164,6 +164,7 @@ html_context = {
     ('discord.ext.commands', 'ext/commands'),
     ('discord.ext.tasks', 'ext/tasks'),
     ('discord.ext.ipc', 'ext/ipc'),
+    ('discord.ext.pages', 'ext/pages'),
   ],
 }
 
