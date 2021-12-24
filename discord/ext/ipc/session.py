@@ -36,7 +36,7 @@ __all__ = "Session"
 class Session:
     """Handles getting webserver requests to the bot.
 
-    .. versionadded:: 2.0
+    .. versionadded:: 2.1
 
     Parameters
     ----------
@@ -54,14 +54,14 @@ class Session:
     """
 
     def __init__(
-        self, address="localhost", port=None, multicast_port=20000, bot_key=None
+        self, address="localhost", port=None, multicast_port=20000, session_token=None
     ):
         self.loop = asyncio.get_event_loop()
 
         self.address = address
         self.port = port
         self.mc_port = multicast_port
-        self.bot_key = bot_key
+        self.session_token = session_token
         self.session = None
         self.websocket = None
         self.multicast = None
@@ -75,14 +75,14 @@ class Session:
     async def socket_ini(self):
         """Initializes connection to the :class:`Server`
 
-        .. versionadded:: 2.0
+        .. versionadded:: 2.1
         """
-        _log.info("IPC: Starting to connect the the server WebSocket...")
+        _log.info("Starting to connect the the server WebSocket...")
         self.session = aiohttp.ClientSession()
 
         if not self.port:
             _log.debug(
-                "IPC: Port was Not provided.",
+                "Port was Not provided.",
                 self.url,
             )
 
@@ -90,16 +90,16 @@ class Session:
 
             payload = {"connect": True, "headers": {"Authorization", self.bot_key}}
 
-            _log.debug(f"IPC: Multicast Server {payload}")
+            _log.debug(f"Multicast Server {payload}")
 
             await self.multicast.send_json(payload)
             ipcres = await self.multicast.receive()
 
             if ipcres.type in (aiohttp.WSMsgType.CLOSE, aiohttp.WSMsgType.CLOSED):
                 _log.error(
-                    "IPC: Oh No, The WebSocket connection has just closed, Multicast Server is unreachable."
+                    "Oh No, The WebSocket connection has just closed, Multicast Server is unreachable."
                 )
-                raise IPCException("IPC: Multicast Connection Failed.")
+                raise IPCException("Multicast Connection Failed.")
 
             port_data = ipcres.json()
             self.port = port_data["port"]
@@ -107,16 +107,16 @@ class Session:
         self.websocket = await self.session.ws_connect(
             self.url, autoping=False, autoclose=False
         )
-        _log.info(f"IPC: Session connected to {self.url}")
+        _log.info(f"Session connected to {self.url}")
 
         return self.websocket
 
-    async def send(self, endpoint, **kwargs):
+    async def request(self, endpoint, **kwargs):
         """Sends a request to the IPC server.
         
-        .. versionadded:: 2.0
+        .. versionadded:: 2.1
         """
-        _log.info(f"IPC: Requesting IPC Server for {endpoint} with {kwargs}")
+        _log.info(f"Requesting IPC Server for {endpoint} with {kwargs}")
 
         if not self.session:
             await self.socket_ini()
@@ -124,30 +124,30 @@ class Session:
         payload = {
             "endpoint": endpoint,
             "data": kwargs,
-            "headers": {"Authorization": self.bot_key},
+            "headers": {"Authorization": self.session_token},
         }
         await self.websocket.send_json(payload)
 
-        _log.debug(f"IPC: Session {payload}")
+        _log.debug(f"Session {payload}")
 
         ipcres = await self.websocket.receive()  # The response from the server.
 
-        _log.debug(f"IPC: Session {ipcres}")
+        _log.debug(f"Session {ipcres}")
 
         if ipcres.type == aiohttp.WSMsgType.PING:
-            _log.info("IPC: Received a ping request")
+            _log.info("Received a ping request")
             await self.websocket.ping()
 
             return await self.request(endpoint, **kwargs)
 
         if ipcres.type == aiohttp.WSMsgType.PONG:
-            _log.info("IPC: Received A pong request")
+            _log.info("Received A pong request")
 
             return await self.request(endpoint, **kwargs)
 
         if ipcres.type == aiohttp.WSMsgType.CLOSED:
             _log.exception(
-                "IPC: Oh No! It seems like the WebSocket connection was closed, Trying to reconnect now."
+                "Oh No! It seems like the WebSocket connection was closed, Trying to reconnect now."
             )
 
             await self.session.close()

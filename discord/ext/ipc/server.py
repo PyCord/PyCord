@@ -29,7 +29,7 @@ from .errors import IPCException
 
 _log = logging.getLogger(__name__)
 
-__all__ = ("IPCServerResponse", "Server", "route")
+__all__ = ("IPCServerResponse", "Server", "make")
 
 
 def make(endpoint=None):
@@ -112,7 +112,7 @@ class Server:
 
         self.address = address
         self.port = port
-        self.bot_key = bot_key
+        self.session_token = session_token
         self.toggle_multicast = toggle_multicast
         self.multicast_port = multicast_port
 
@@ -159,7 +159,7 @@ class Server:
         """
         self.update_endpoints()
 
-        _log.info("IPC: Initiating Server...")
+        _log.info("Initiating Server...")
 
         websocket = aiohttp.web.WebSocketResponse()
         await websocket.prepare(request)
@@ -167,23 +167,23 @@ class Server:
         async for message in websocket:
             request = message.json()
 
-            _log.debug(f"IPC: Server {request}")
+            _log.debug(f"Server {request}")
 
             endpoint = request.get("endpoint")
 
             headers = request.get("headers")
 
-            if not headers or headers.get("Authorization") != self.bot_key:
-                _log.info("IPC: Unauthorized request recieved!")
+            if not headers or headers.get("Authorization") != self.session_token:
+                _log.info("Unauthorized request recieved!")
                 response = {
                     "error": "IPC-Server: Invalid or no token provided.",
                     "code": 403,
                 }
             else:
                 if not endpoint or endpoint not in self.endpoints:
-                    _log.info("IPC: Recieved an invalid endpoint.")
+                    _log.info("Recieved an invalid endpoint.")
                     response = {
-                        "error": "IPC-Server: Invalid or no endpoint given.",
+                        "error": "IPC-Server: Invalid endpoint given.",
                         "code": 400,
                     }
 
@@ -220,7 +220,7 @@ class Server:
 
             try:
                 await websocket.send_json(response)
-                _log.debug(f"IPC: Server {response}")
+                _log.debug(f"Server {response}")
 
             except TypeError as error:
                 if str(error).startswith("Object of type") and str(error).endswith(
@@ -236,7 +236,7 @@ class Server:
                     response = {"error": error_response, "code": 500}
 
                     await websocket.send_json(response)
-                    _log.debug(f"IPC: Server {response}")
+                    _log.debug(f"Server {response}")
 
                     raise IPCException(error_response)
 
