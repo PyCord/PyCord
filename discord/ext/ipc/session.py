@@ -54,7 +54,11 @@ class Session:
     """
 
     def __init__(
-        self, address="localhost", port=None, multicast_port=20000, session_token=None
+        self,
+        address="localhost",
+        port=None,
+        multicast_port=20000,
+        session_token=None
     ):
         self.loop = asyncio.get_event_loop()
 
@@ -113,7 +117,7 @@ class Session:
 
     async def request(self, endpoint, **kwargs):
         """Sends a request to the IPC server.
-        
+
         .. versionadded:: 2.1
         """
         _log.info(f"Requesting IPC Server for {endpoint} with {kwargs}")

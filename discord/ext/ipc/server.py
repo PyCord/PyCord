@@ -302,4 +302,3 @@ class Server:
             )
 
         self.loop.run_until_complete(self.__start(self._server, self.port))
-
