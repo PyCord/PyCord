@@ -31,7 +31,7 @@ import asyncio
 
 from . import utils
 from .enums import try_enum, InteractionType, InteractionResponseType
-from .errors import InteractionResponded, HTTPException, ClientException, InvalidArgument
+from .errors import InteractionResponded, ClientException, InvalidArgument
 from .channel import PartialMessageable, ChannelType
 from .file import File
 from .user import User
@@ -216,6 +216,16 @@ class Interaction:
         instead.
         """
         return InteractionResponse(self)
+    
+    @utils.cached_slot_property('_cs_respond')
+    def respond(self) -> InteractionResponse.send_message:
+        """A shortform shortcut for :meth:`InteractionResponse.send_message`"""
+        return InteractionResponse(self).send_message
+
+    @utils.cached_slot_property('_cs_send')
+    def send(self) -> Interaction.channel.send:
+        """A shortform shortcut for :meth:`Interaction.channel.send`"""
+        return self.channel.send
 
     @utils.cached_slot_property('_cs_followup')
     def followup(self) -> Webhook:

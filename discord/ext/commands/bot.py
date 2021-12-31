@@ -375,11 +375,11 @@ class BotBase(GroupMixin, discord.cog.CogMixin):
         await self.process_commands(message)
 
 
-class Bot(BotBase, discord.Bot):
+class Bot(BotBase, discord.Client):
     """Represents a discord bot.
 
-    This class is a subclass of :class:`discord.Bot` and as a result
-    anything that you can do with a :class:`discord.Bot` you can do with
+    This class is a subclass of :class:`discord.Client` and as a result
+    anything that you can do with :class:`discord.Client` you can do with
     this bot.
 
     This class also subclasses :class:`.GroupMixin` to provide the functionality
@@ -433,8 +433,8 @@ class Bot(BotBase, discord.Bot):
     """
     pass
 
-class AutoShardedBot(BotBase, discord.AutoShardedBot):
-    """This is similar to :class:`.Bot` except that it is inherited from
-    :class:`discord.AutoShardedBot` instead.
+class AutoShardedBot(BotBase, discord.AutoShardedClient):
+    """This is similar to :class:`commands.Bot` except that it is inherited from
+    :class:`discord.AutoShardedClient` instead.
     """
     pass

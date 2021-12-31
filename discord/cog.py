@@ -52,6 +52,7 @@ MISSING: Any = discord.utils.MISSING
 def _is_submodule(parent: str, child: str) -> bool:
     return parent == child or child.startswith(parent + ".")
 
+@discord.utils.deprecated("commands.CogMeta")
 class CogMeta(type):
     """A metaclass for defining a cog.
 
@@ -219,6 +220,7 @@ def _cog_special_method(func: FuncT) -> FuncT:
     func.__cog_special_method__ = None
     return func
 
+@discord.utils.deprecated("commands.Cog")
 class Cog(metaclass=CogMeta):
     """The base class that all cogs must inherit from.
 
@@ -499,6 +501,7 @@ class Cog(metaclass=CogMeta):
             except Exception:
                 pass
 
+@discord.utils.deprecated("commands.CogMixin")
 class CogMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

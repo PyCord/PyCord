@@ -63,6 +63,7 @@ from .errors import Forbidden, DiscordException
 from .interactions import Interaction
 from .enums import InteractionType
 from .user import User
+from .utils import deprecated
 
 CoroFunc = Callable[..., Coroutine[Any, Any, Any]]
 CFT = TypeVar('CFT', bound=CoroFunc)
@@ -718,7 +719,7 @@ class ApplicationCommandMixin:
         return cls(self, interaction)
 
 
-
+@deprecated("commands.BotBase")
 class BotBase(ApplicationCommandMixin, CogMixin):
     _supports_prefixed_commands = False
     # TODO I think
@@ -1098,9 +1099,11 @@ class BotBase(ApplicationCommandMixin, CogMixin):
                 self.owner_id = owner_id = app.owner.id
                 return user.id == owner_id
 
-
+@deprecated("commands.Bot")
 class Bot(BotBase, Client):
     """Represents a discord bot.
+
+    WARNING: This class has been deprecated and is planned for removal soon.
 
     This class is a subclass of :class:`discord.Client` and as a result
     anything that you can do with a :class:`discord.Client` you can do with
@@ -1135,10 +1138,12 @@ class Bot(BotBase, Client):
 
     pass
 
-
+@deprecated("commands.AutoShardedBot")
 class AutoShardedBot(BotBase, AutoShardedClient):
     """This is similar to :class:`.Bot` except that it is inherited from
     :class:`discord.AutoShardedClient` instead.
+
+    WARNING: This class has been deprecated and is planned for removal soon.
 
     .. versionadded:: 2.0
     """
