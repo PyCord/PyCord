@@ -47,6 +47,7 @@ import struct
 import threading
 from typing import Any, Callable, List, Optional, TYPE_CHECKING, Tuple
 
+from .warnings import NaClWarning
 from . import opus, utils
 from .backoff import ExponentialBackoff
 from .gateway import *
@@ -230,7 +231,7 @@ class VoiceClient(VoiceProtocol):
 
     def __init__(self, client: Client, channel: abc.Connectable):
         if not has_nacl:
-            raise RuntimeError("PyNaCl library needed in order to use voice")
+            raise NaClWarning("PyNaCl library needed in order to use voice")
 
         super().__init__(client, channel)
         state = client._connection

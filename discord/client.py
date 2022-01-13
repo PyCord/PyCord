@@ -34,6 +34,7 @@ from typing import Any, Callable, Coroutine, Dict, Generator, List, Optional, Se
 
 import aiohttp
 
+from .warnings import NaClWarning
 from .user import User, ClientUser
 from .invite import Invite
 from .template import Template
@@ -238,7 +239,7 @@ class Client:
 
         if VoiceClient.warn_nacl:
             VoiceClient.warn_nacl = False
-            _log.warning("PyNaCl is not installed, voice will NOT be supported")
+            raise NaClWarning("PyNaCl is not installed, voice will NOT be supported")
 
     # internals
 
