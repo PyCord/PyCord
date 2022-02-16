@@ -112,7 +112,6 @@ async def json_or_text(response: aiohttp.ClientResponse) -> Union[Dict[str, Any]
 
 
 class Route:
-
     def __init__(self, method: str, path: str, **parameters: Any) -> None:
         self.path: str = path
         self.method: str = method
@@ -220,7 +219,7 @@ class HTTPClient:
     ) -> Any:
         bucket = route.bucket
         method = route.method
-        url = f"https://discord.com/api/v{self.version}" + route.url
+        url = f"https://discord.com/api/v{self.version}{route.url}"
 
         lock = self._locks.get(bucket)
         if lock is None:
