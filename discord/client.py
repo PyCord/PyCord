@@ -240,7 +240,7 @@ class Client:
             proxy_auth=proxy_auth,
             unsync_clock=unsync_clock,
             loop=self.loop,
-            version=options.get("version", 10)
+            version=options.get("version", 10),
         )
 
         self._handlers: Dict[str, Callable] = {"ready": self._handle_ready}
